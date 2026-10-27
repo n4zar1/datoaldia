@@ -398,7 +398,7 @@
         </div>
         <div>
           <div class="antes" data-antes hidden>Antes <s></s></div>
-          <div class="cifra" data-con-precio hidden><span data-precio></span><small>€ + impuestos</small></div>
+          <div class="cifra" data-con-precio hidden><span data-precio></span><small>€</small></div>
           <p class="nota-precio" data-con-precio hidden>Precio + impuestos de tu país.</p>
           <a class="boton amarillo" data-comprar href="https://n4zar1.gumroad.com/l/kit-reels" data-gumroad-overlay-checkout="true">Comprar el kit</a>
         </div>
@@ -456,8 +456,21 @@
   // descuento automático aplicado, y el normal para tacharlo si hay descuento. Importes sin IVA, como en Gumroad.
   const euros = (n) => n.toLocaleString("es-ES", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
   fetch("https://datoaldia-api.es-estafa-bot.workers.dev/precios").then(r => r.ok ? r.json() : Promise.reject()).catch(() => fetch("https://n4zar1.com/precios.json", { cache: "no-store" }).then(r => r.json())).then(todos => {
-    const k = todos["kit-reels"];
+    const k = (todos.productos || todos)["kit-reels"];
     if (!k) return;
+    // En otro país: precio aproximado en su moneda (el cobro es en euros, se indica debajo).
+    const moneda = (n, m) => n.toLocaleString("es", { style: "currency", currency: m, maximumFractionDigits: 0 });
+    if (k.local) {
+      document.querySelectorAll("[data-precio]").forEach(e => e.textContent = "≈ " + moneda(k.local.precio, k.local.moneda));
+      document.querySelectorAll(".cifra").forEach(e => { e.style.fontSize = "clamp(40px, 6.4vw, 76px)"; e.style.whiteSpace = "nowrap"; });
+      document.querySelectorAll(".cifra small, [data-con-precio] small").forEach(e => e.textContent = "");
+      document.querySelectorAll(".nota-precio").forEach(e => e.textContent = `Se cobra ${euros(k.precio)} € + impuestos de tu país.`);
+      document.querySelectorAll(".barra-compra [data-con-precio]").forEach(e => e.textContent = "≈ " + moneda(k.local.precio, k.local.moneda));
+      if (k.normal && k.local.normal) document.querySelectorAll("[data-antes] s").forEach(e => e.textContent = moneda(k.local.normal, k.local.moneda));
+      if (k.normal) document.querySelectorAll("[data-antes]").forEach(e => e.hidden = false);
+      document.querySelectorAll("[data-con-precio]").forEach(e => e.hidden = false);
+      return;
+    }
     document.querySelectorAll("[data-precio]").forEach(e => e.textContent = euros(k.precio));
     if (k.normal && k.normal > k.precio) document.querySelectorAll("[data-antes]").forEach(e => {
       e.querySelector("s").textContent = euros(k.normal) + " €"; e.hidden = false;
