@@ -437,8 +437,8 @@
 
 <script>
   // Lo único que hay que tocar para actualizar la página.
-  // El día se calcula solo desde el inicio del reto. Vídeos y seguidores llegan de /api/reto (Cloudflare, con el
-  // token de Instagram como secreto); si aún no está configurado, se quedan estos valores.
+  // El día se calcula solo desde el inicio del reto. Vídeos y seguidores llegan de reto.json (una GitHub Action lo
+  // actualiza cada 30 min con el token de Instagram como secreto); si falla, se quedan estos valores.
   const INICIO_RETO = "2026-10-27";
   const RETO = { dia: 1, videos: 0, seguidores: 3 };
   RETO.dia = Math.max(1, Math.floor((Date.now() - new Date(INICIO_RETO + "T00:00:00+01:00")) / 86400000) + 1);
@@ -464,7 +464,7 @@
     }
   };
   pintarReto();
-  fetch("/api/reto").then(r => r.ok ? r.json() : null).then(d => {
+  fetch("reto.json?t=" + Date.now()).then(r => r.ok ? r.json() : null).then(d => {
     if (!d) return;
     if (Number.isFinite(d.seguidores)) RETO.seguidores = d.seguidores;
     if (Number.isFinite(d.videos)) RETO.videos = d.videos;
