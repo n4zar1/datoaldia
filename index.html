@@ -391,9 +391,9 @@
           <div class="sellos"><span>Descarga inmediata</span><span>Soporte por correo</span><span>Actualizaciones incluidas</span></div>
         </div>
         <div>
-          <div class="antes" data-antes hidden>Antes <s></s> + IVA</div>
-          <div class="cifra" data-con-precio hidden><span data-precio></span><small>€ + IVA</small></div>
-          <p class="nota-precio" data-con-precio hidden>+ IVA. En España, <span data-iva></span> € en total; fuera de España se ajusta a los impuestos de tu país.</p>
+          <div class="antes" data-antes hidden>Antes <s></s></div>
+          <div class="cifra" data-con-precio hidden><span data-precio></span><small>€ + impuestos</small></div>
+          <p class="nota-precio" data-con-precio hidden>Precio + impuestos de tu país.</p>
           <a class="boton amarillo" data-comprar href="https://n4zar1.gumroad.com/l/kit-reels" data-gumroad-overlay-checkout="true">Comprar el kit</a>
         </div>
       </div>
@@ -431,7 +431,7 @@
 </footer>
 
 <div class="barra-compra" id="barra-compra">
-  <span data-con-precio hidden><span data-precio></span> € + IVA</span>
+  <span data-con-precio hidden><span data-precio></span> € + impuestos</span>
   <a class="boton amarillo" data-comprar href="https://n4zar1.gumroad.com/l/kit-reels" data-gumroad-overlay-checkout="true">Comprar el kit</a>
 </div>
 
@@ -453,7 +453,6 @@
     const k = todos["kit-reels"];
     if (!k) return;
     document.querySelectorAll("[data-precio]").forEach(e => e.textContent = euros(k.precio));
-    document.querySelectorAll("[data-iva]").forEach(e => e.textContent = euros(Math.round(k.precio * 121) / 100));
     if (k.normal && k.normal > k.precio) document.querySelectorAll("[data-antes]").forEach(e => {
       e.querySelector("s").textContent = euros(k.normal) + " €"; e.hidden = false;
     });
