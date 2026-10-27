@@ -455,7 +455,7 @@
   // Precio del kit desde Gumroad (n4zar1.com/precios.json lo actualiza solo cada 15 minutos): el de hoy, con el
   // descuento automático aplicado, y el normal para tacharlo si hay descuento. Importes sin IVA, como en Gumroad.
   const euros = (n) => n.toLocaleString("es-ES", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
-  fetch("https://n4zar1.com/precios.json", { cache: "no-store" }).then(r => r.json()).then(todos => {
+  fetch("https://datoaldia-api.es-estafa-bot.workers.dev/precios").then(r => r.ok ? r.json() : Promise.reject()).catch(() => fetch("https://n4zar1.com/precios.json", { cache: "no-store" }).then(r => r.json())).then(todos => {
     const k = todos["kit-reels"];
     if (!k) return;
     document.querySelectorAll("[data-precio]").forEach(e => e.textContent = euros(k.precio));
