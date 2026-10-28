@@ -515,7 +515,7 @@
   setInterval(leerReto, 30000); // el Worker se actualiza cada minuto; la página mira cada 30 s
 
   const lista = document.getElementById("lista-diario");
-  [...DIARIO].sort((a, b) => b.dia - a.dia).forEach(d => {
+  [...DIARIO].sort((a, b) => a.dia - b.dia).forEach(d => {
     const art = document.createElement("article");
     art.className = "entrada";
     art.innerHTML = `<div class="dia">Día <b>${d.dia}</b></div><div><h3></h3><p></p></div>`;
